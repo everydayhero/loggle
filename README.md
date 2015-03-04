@@ -15,7 +15,7 @@ Ensure a loggle volume container is running on each node:
     docker run \
       --detach \
       --name="loggle-base" \
-      -v /loggle:/loggle \
+      --volume /loggle:/loggle \
       loggle
 
 Preface your docker commands with /loggle/wrap.sh:
@@ -28,12 +28,12 @@ Preface your docker commands with /loggle/wrap.sh:
 
     docker run \
       ...
-      -env PLAIN_APP_NAME=<app-name> \
-      -env PLAIN_PROCESS_TYPE=<process-type> \
-      -env PLAIN_LOG_FILE=/dev/stdout \
+      --env PLAIN_APP_NAME=<app-name> \
+      --env PLAIN_PROCESS_TYPE=<process-type> \
+      --env PLAIN_LOG_FILE=/dev/stdout \
       --volumes-from loggle-base \
       --volume /loggle:/loggle \
-      /loggle/wrap.sh /serve
+      /loggle/wrap.sh ./web
 
     <BLISSFUL SILENCE>
 
