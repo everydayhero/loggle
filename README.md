@@ -1,10 +1,10 @@
 # Loggle
 
-Replace STDOUT logs with syslog
+Replace STDOUT logs with file logging
 
 ## Assumptions
 
-- /dev/log in your app container is a syslog socket
+- you will pass the location of a log file
 - apps set their app name and process type as environment
     variables
 
@@ -28,10 +28,11 @@ Preface your docker commands with /loggle/wrap.sh:
 
     docker run \
       ...
-      -e PLAIN_APP_NAME=<app-name> \
-      -e PLAIN_PROCESS_TYPE=<process-type> \
+      -env PLAIN_APP_NAME=<app-name> \
+      -env PLAIN_PROCESS_TYPE=<process-type> \
+      -env PLAIN_LOG_FILE=/dev/stdout \
       --volumes-from loggle-base \
-      -v /loggle:/loggle \
+      --volume /loggle:/loggle \
       /loggle/wrap.sh /serve
 
     <BLISSFUL SILENCE>
