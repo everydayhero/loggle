@@ -1,12 +1,11 @@
 # Loggle
 
-Replace STDOUT logs with file logging
+Replace STDOUT with syslog
 
 ## Assumptions
 
-- you will pass the location of a log file
-- apps set their app name and process type as environment
-    variables
+* syslog is exposed over UDP port 5140 via docker link
+* apps set their app name and process type as environment variables
 
 ## Use
 

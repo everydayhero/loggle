@@ -1,14 +1,16 @@
 #!/bin/sh
 
-docker_container_id="`cat /proc/self/cgroup |grep cpu: | cut -f 3- -d/ | cut -b 1-12`"
 process_type="${PLAIN_PROCESS_TYPE}"
 app_name="${PLAIN_APP_NAME}"
-log_file="${PLAIN_LOG_FILE}"
+docker_container="`hostname`"
 
-log_prefix="${app_name}[${process_type}.${docker_container_id}]"
+syslog_server="$SYSLOG_PORT_5140_UDP_ADDR"
+syslog_port="$SYSLOG_PORT_5140_UDP_PORT"
 
-loggle() {
-  sed -e "s/^/${log_prefix} /"
-}
+log_tag="${app_name}[${process_type}.${docker_container}]"
 
-"$@" | loggle > "${log_file}"
+if [ x"$syslog_server" = x ]; then
+  "$@" | logger -t "$log_tag"
+else
+  "$@" | logger --udp -n "$syslog_server" -P "$syslog_port" -t "$log_tag"
+fi
